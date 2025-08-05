@@ -41,3 +41,50 @@ Features
     - Sends a JSON payload to the Flask app.
 
 4. Flask app publishes MQTT messages to devices.
+
+## Setup Python Environment & API Keys
+
+1. We’ll use **.iot** as the name of the virtual environment (it will be in the project folder).
+
+            python3 -m venv .iot
+            source .iot/bin/activate   # On Windows: .iot\Scripts\activate
+
+2. Install the required packages from requirements.txt:
+
+            pip install --upgrade pip
+            pip install -r requirements.txt
+   
+4. Create a .keys file for API keys
+
+         touch .keys
+   
+   Contents:
+   
+         OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxx
+         PORCUPINE_ACCESS_KEY=yyyyyyyyyyyyyyyyyy
+
+5. Run the voice llm server:
+
+         python3 voice_llm.py
+
+## Running the flask server and the MQTT broker 
+
+From the docker/ directory:
+
+      docker compose up --build
+
+This starts:
+
+ - flaskapp → The Flask REST API, listening on port 5000
+- mosquitto → MQTT broker on port 1883
+
+Both run in host network mode, so ports match the host machine.
+
+
+
+
+
+
+
+
+
