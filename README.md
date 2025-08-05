@@ -71,7 +71,7 @@ Features
 
 From the docker/ directory:
 
-      docker compose up --build
+      docker-compose up --build
 
 This starts:
 
