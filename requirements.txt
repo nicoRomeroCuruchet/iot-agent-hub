@@ -1,0 +1,12 @@
+flask
+paho-mqtt
+pyaudio
+sounddevice
+git+https://github.com/openai/whisper.git 
+torch
+pvporcupine
+numpy
+scipy
+openai
+requests
+python-dotenv

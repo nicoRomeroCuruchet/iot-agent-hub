@@ -1,0 +1,14 @@
+services:
+  flaskapp:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    network_mode: host
+    depends_on:
+      - mosquitto
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    network_mode: host
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
