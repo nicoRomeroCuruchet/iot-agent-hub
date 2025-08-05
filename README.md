@@ -63,9 +63,15 @@ Features
          OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxx
          PORCUPINE_ACCESS_KEY=yyyyyyyyyyyyyyyyyy
 
-5. Run the voice llm server:
+5. You can run voice_llm.py locally (not inside the container) so it has microphone access:
 
          python3 voice_llm.py
+
+   - It will:
+
+     - Wait for the wake word "computer".
+     - Record 5 seconds of speech.
+     - Send commands to the Flask app based on the LLM output.
 
 ## Running the flask server and the MQTT broker 
 
