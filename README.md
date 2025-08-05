@@ -80,6 +80,17 @@ This starts:
 
 Both run in host network mode, so ports match the host machine.
 
+## Testing the API
+
+Once running, you can test the relay control endpoint:
+
+            curl -X POST -H "Content-Type: application/json" -d '{"state": true}' http://localhost:5000/relay
+            
+And test the error endpoint:
+      
+            curl -X POST -H "Content-Type: application/json" -d '{"error": "Example error"}' http://localhost:5000/error
+
+
 
 
 
