@@ -14,7 +14,6 @@ def handle_error():
         it's for handle when the listener fails in detect or
         processing an misunderstanding phrase."""
     error_message = request.json.get("error", "Unknown error")
-    print(f"Error received: {error_message}")
     return {"status": "error", "message": error_message}
 
 @app.route('/relay', methods=['POST'])

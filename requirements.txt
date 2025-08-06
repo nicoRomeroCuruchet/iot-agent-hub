@@ -10,3 +10,5 @@ scipy
 openai
 requests
 python-dotenv
+loguru
+pygame
