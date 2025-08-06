@@ -3,14 +3,16 @@ This is a minimal proof-of-concept for an  IoT assistant that combines wake word
 
 It allows you to control relays or report errors through natural voice commands.
 
-Features
+### Features
 
-🎙 Wake word detection — activates when you say "terminator", "alexa", "computer", etc. 
-⚡ Fast transcription — uses faster-whisper (CPU/GPU optimized Whisper.cpp) for quick local STT
-🤖 AI-powered intent recognition — GPT‑4o‑mini with tool calls to map voice commands to actions
-🔌 IoT device control — sends POST requests to a Flask backend to switch relays or log errors
-🔊 Text-to-speech responses — generates assistant replies with OpenAI TTS and plays them in memory
+       -🎙 Wake word detection — activates when you say "terminator", "alexa", "computer", etc. 
+       -⚡ Fast transcription — uses faster-whisper (CPU/GPU optimized Whisper.cpp) for quick local STT 
+       -🤖 AI-powered intent recognition — GPT‑4o‑mini with tool calls to map voice commands to actions
+       -🔌 IoT device control — sends POST requests to a Flask backend to switch relays or log errors
+       -🔊 Text-to-speech responses — generates assistant replies with OpenAI TTS and plays them in memory
+            
 
+## Project Organization
 
       project/
       ├── server.py               # Flask app with MQTT publishing
