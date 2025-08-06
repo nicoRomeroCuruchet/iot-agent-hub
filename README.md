@@ -29,7 +29,7 @@ It allows you to control relays or report errors through natural voice commands.
 
 1. Mosquitto runs as the MQTT broker.
 
-2. Flask app (server.py) exposes:
+2. server.py exposes:
 
     - POST /relay → Controls a relay by publishing to MQTT topic home/relay.
     - POST /error → Logs error messages.
