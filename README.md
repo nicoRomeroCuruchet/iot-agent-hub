@@ -36,12 +36,12 @@ It allows you to control relays or report errors through natural voice commands.
 
 3. voice_llm.py:
 
-    - Listens for wake word "computer".
-    - Records 5 seconds of audio.
-    - Transcribes the audio using Whisper.
-    - Builds a prompt including the server.py code.
-    - Queries an LLM to determine the action (turn relay on/off, or send error).
-    - Sends a JSON payload to the Flask app.
+   - Wake word detection — Porcupine listens continuously for a predefined keyword.
+   - Voice recording — After detection, records your voice for a few seconds.
+   - Speech-to-text — Transcribes audio with faster-whisper.
+   - AI intent recognition — Sends the transcription to GPT‑4o‑mini with function calling enabled.
+   - Tool execution — If GPT chooses a tool, sends data to Flask server.
+   - Assistant confirmation — GPT generates a confirmation, which is spoken aloud via OpenAI TTS.
 
 4. Flask app publishes MQTT messages to devices.
 
