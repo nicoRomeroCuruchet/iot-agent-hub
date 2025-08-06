@@ -1,8 +1,7 @@
 flask
 paho-mqtt
 pyaudio
-sounddevice
-git+https://github.com/openai/whisper.git 
+sounddevice 
 torch
 pvporcupine
 numpy
@@ -12,3 +11,4 @@ requests
 python-dotenv
 loguru
 pygame
+faster_whisper
