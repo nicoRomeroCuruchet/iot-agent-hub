@@ -1,2 +1,5 @@
 .iot
 .keys
+reply.mp3
+.env
+__pycache__/
