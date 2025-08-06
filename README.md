@@ -1,20 +1,21 @@
 ## IoT Voice Assistant – Hello World
-This is a minimal proof-of-concept for an IoT voice assistant that listens for a wake word, transcribes speech, decides an action using an LLM, and sends commands to devices via HTTP → MQTT.
+This is a minimal proof-of-concept for an  IoT assistant that combines wake word detection, fast speech-to-text, GPT‑4o‑mini function calling, and direct device control via a Flask backend.
 
-The idea is that this can be integrated with devices that use the MQTT protocol (e.g., smart relays, sensors, actuators).
+It allows you to control relays or report errors through natural voice commands.
 
 Features
 
-- Wake word detection using Picovoice Porcupine.
-- Speech-to-text transcription via OpenAI Whisper.
-- Decision-making using an LLM (local Ollama or OpenAI API).
-- Flask REST API that exposes /relay and /error endpoints.
-- MQTT publishing via paho-mqtt to control devices.
-- Dockerized setup with Mosquitto MQTT broke
+🎙 Wake word detection — activates when you say "terminator", "alexa", "computer", etc. 
+⚡ Fast transcription — uses faster-whisper (CPU/GPU optimized Whisper.cpp) for quick local STT
+🤖 AI-powered intent recognition — GPT‑4o‑mini with tool calls to map voice commands to actions
+🔌 IoT device control — sends POST requests to a Flask backend to switch relays or log errors
+🔊 Text-to-speech responses — generates assistant replies with OpenAI TTS and plays them in memory
+
 
       project/
       ├── server.py               # Flask app with MQTT publishing
       ├── voice_llm.py            # Voice capture, transcription, LLM query, payload sending
+      ├── utils.py                # to play sounds
       ├── docker/
       │   ├── Dockerfile
       │   ├── docker-compose.yml
