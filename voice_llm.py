@@ -13,6 +13,7 @@ import sounddevice as sd
 from openai import OpenAI
 from dotenv import load_dotenv
 from utils import speak_with_openai
+from faster_whisper import WhisperModel
 
 
 tools = [
@@ -86,8 +87,11 @@ if __name__ == "__main__":
     )
 
     fs = 16000    # Sample rate
-    duration =2  # seconds
-    model = whisper.load_model("base", device="cpu")  # or "small", "medium", "large"
+    duration = 3  # seconds
+    loguru.logger.info("Loading Whisper model...")
+    # Load the Whisper model
+    model = WhisperModel("base.en", device="cpu")  # or "small", "medium", "large"
+    loguru.logger.info("Whisper model loaded successfully.")
     loguru.logger.info("Models loaded, starting wake word detection...")
     try:
         while True:
@@ -105,14 +109,14 @@ if __name__ == "__main__":
                 measure = time.time()
                 loguru.logger.info("Recording complete, processing...")
                 audio_float = audio.astype('float32').flatten() / 32768.0
-                result = model.transcribe(audio_float, language="en", fp16=False)   
+                segments, info = model.transcribe(audio_float, beam_size=5, language="en", word_timestamps=True) 
                 #Print each segment with timestamps
                 input = ""
-                for segment in result.get("segments", []):
-                    loguru.logger.info(f"[{segment['start']:.2f} - {segment['end']:.2f}] {segment['text']}")
-                    input += segment['text']
-
-
+                for segment in segments:  # iterate generator
+                    loguru.logger.info(f"[{segment.start:.2f} - {segment.end:.2f}] {segment.text}")
+                    input += segment.text
+                    input = input.strip()
+                loguru.logger.info(f"Transcription complete: {input}")
                 system_message = {
                     "role": "system",
                     "content":"You are an IoT voice assistant that controls a relay or sends errors."
