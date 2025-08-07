@@ -63,27 +63,27 @@ Setup Notes:
 
 1. We’ll use **.iot** as the name of the virtual environment (it will be in the project folder).
 
-            python3 -m venv .iot
-            source .iot/bin/activate   # On Windows: .iot\Scripts\activate
+       python3 -m venv .iot
+       source .iot/bin/activate   # On Windows: .iot\Scripts\activate
 
 2. Install the required packages from requirements.txt:
 
-            pip install --upgrade pip
-            pip install -r requirements.txt
+       pip install --upgrade pip
+       pip install -r requirements.txt
    
 4. Create a .keys file for API keys
 
-         touch .keys
+       touch .keys
    
    Contents:
    
-         OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxx
-         PORCUPINE_ACCESS_KEY=yyyyyyyyyyyyyyyyyy
-         OPENWEATHER_API_KEY=59xxxxxxxxxxxxxxxxx
+       OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxx
+       PORCUPINE_ACCESS_KEY=yyyyyyyyyyyyyyyyyy
+       OPENWEATHER_API_KEY=59xxxxxxxxxxxxxxxxx
 
 6. You can run voice_llm.py locally (not inside the container) so it has microphone access:
 
-         python3 voice_llm.py
+       python3 voice_llm.py
 
    - It will:
 
@@ -95,8 +95,8 @@ Setup Notes:
 
 From the docker/ directory:
 
-      cd docker
-      docker-compose up --build
+    cd docker
+    docker-compose up --build
 
 This starts:
 
