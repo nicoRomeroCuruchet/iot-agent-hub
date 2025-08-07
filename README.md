@@ -65,8 +65,9 @@ It allows you to control relays or report errors through natural voice commands.
    
          OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxx
          PORCUPINE_ACCESS_KEY=yyyyyyyyyyyyyyyyyy
+         OPENWEATHER_API_KEY=59xxxxxxxxxxxxxxxxx
 
-5. You can run voice_llm.py locally (not inside the container) so it has microphone access:
+6. You can run voice_llm.py locally (not inside the container) so it has microphone access:
 
          python3 voice_llm.py
 
