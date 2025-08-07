@@ -1,7 +1,21 @@
 ## IoT Voice Assistant – Hello World
-This is a minimal proof-of-concept for an  IoT assistant that combines wake word detection, fast speech-to-text, GPT‑4o‑mini function calling, and direct device control via a Flask backend.
 
-It allows you to control relays or report errors through natural voice commands.
+
+This is a minimal proof‑of‑concept IoT voice assistant that combines **wake word detection**, **fast speech‑to‑text transcription**, **GPT‑4o‑mini function calling**, and **direct device control** via a Flask backend.
+
+Using natural voice commands, it can:
+
+* **Control relays** (turn devices on/off).
+* **Report errors** to the backend.
+* **Query current weather** for any city.
+* **Set alarms** at specified times with optional messages.
+
+The assistant listens for a wake word, records speech, transcribes, interprets the command using GPT‑4o‑mini’s tool‑calling capabilities, and executes the corresponding action automatically.
+
+Setup Notes:
+
+ - OpenWeatherMap API key: Create a free account at https://home.openweathermap.org/users/sign_up to enable weather queries.
+ - Picovoice Access Key: Create a free account at https://picovoice.ai/docs/quick-start/porcupine-python/ to enable wake word detection.
 
 ### Features
 
