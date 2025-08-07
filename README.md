@@ -13,7 +13,7 @@ Using natural voice commands, it can:
 The assistant listens for a wake word, records speech, transcribes, interprets the command using GPT‑4o‑mini’s tool‑calling capabilities, and executes the corresponding action automatically.
 
 Setup Notes:
-
+ - OpenAI API Key – to use GPT‑4o‑mini for natural language processing at https://platform.openai.com/api-keys
  - OpenWeatherMap API key: Create a free account at https://home.openweathermap.org/users/sign_up to enable weather queries.
  - Picovoice Access Key: Create a free account at https://picovoice.ai/docs/quick-start/porcupine-python/ to enable wake word detection.
 
