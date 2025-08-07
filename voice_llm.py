@@ -2,7 +2,7 @@ import os
 import json
 import time
 import pyaudio
-import whisper
+import torch
 import requests
 import loguru
 
@@ -18,7 +18,7 @@ from faster_whisper import WhisperModel
 
 tools = [
     {
-        "type": "function",
+        "type": "function", # This tool will be used to control the relay
         "function": {
             "name": "send_relay",
             "description": "Control the relay via POST to the Flask server",
@@ -35,7 +35,7 @@ tools = [
         }
     },
     {
-        "type": "function",
+        "type": "function", # This tool will be used to send error messages
         "function": {
             "name": "send_error",
             "description": "Send an error message to the Flask server",
@@ -50,6 +50,44 @@ tools = [
                 "required": ["error"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "Name of the city to get weather for"
+                    }
+                },
+                "required": ["city"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "set_alarm",
+            "description": "Set an alarm to trigger at a specific time",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "description": "Alarm time in HH:MM 24-hour format"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Optional message to announce when the alarm goes off"
+                    }
+                },
+                "required": ["time"]
+            }
+        }
     }
 ]
 
@@ -60,11 +98,12 @@ if __name__ == "__main__":
     env_path = Path(__file__).parent / ".keys"
     load_dotenv(dotenv_path=env_path)
 
-    flask_ip = "localhost"
+    flask_ip = "192.168.0.17"  # Replace with your Flask server IP
     flask_port = 5000
 
     openai_api_key = os.getenv("OPENAI_API_KEY")
     pv_access_key = os.getenv("PORCUPINE_ACCESS_KEY")
+    openweather_api_key = os.getenv("OPENWEATHER_API_KEY")
 
     if not openai_api_key or not pv_access_key:
         raise ValueError("Missing API keys in environment variables.")
@@ -87,10 +126,11 @@ if __name__ == "__main__":
     )
 
     fs = 16000    # Sample rate
-    duration = 3  # seconds
+    duration = 5  # seconds
     loguru.logger.info("Loading Whisper model...")
     # Load the Whisper model
-    model = WhisperModel("base.en", device="cpu")  # or "small", "medium", "large"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = WhisperModel("base.en", device=device, compute_type="float16")  # or "small", "medium", "large"
     loguru.logger.info("Whisper model loaded successfully.")
     loguru.logger.info("Models loaded, starting wake word detection...")
     try:
@@ -100,8 +140,7 @@ if __name__ == "__main__":
             keyword_index = porcupine.process(pcm)
             if keyword_index >= 0:
                 loguru.logger.info("Wake word detected, recording audio...")
-                # Give a small pause before recording to avoid cutting off the start
-                time.sleep(0.1)
+                speak_with_openai(client, "Yes, tell me.", blocking=True)
                 # Call your Whisper transcription or other logic here
                 loguru.logger.info(f"Speak now for {duration} sec...")
                 audio = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype='int16')
@@ -113,9 +152,9 @@ if __name__ == "__main__":
                 #Print each segment with timestamps
                 input = ""
                 for segment in segments:  # iterate generator
-                    loguru.logger.info(f"[{segment.start:.2f} - {segment.end:.2f}] {segment.text}")
+                    #loguru.logger.info(f"[{segment.start:.2f} - {segment.end:.2f}] {segment.text}")
                     input += segment.text
-                    input = input.strip()
+                    input = input.strip().lower()
                 loguru.logger.info(f"Transcription complete: {input}")
                 system_message = {
                     "role": "system",
@@ -153,6 +192,21 @@ if __name__ == "__main__":
                             r = requests.post(f"http://{flask_ip}:{flask_port}/error", json={"error": args["error"]})
                             tool_result = r.json()
 
+                        elif name == "get_weather":
+                            city = args["city"]
+                            url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={openweather_api_key}&units=metric"
+                            r = requests.get(url)
+                            tool_result = r.json()
+
+                        elif name == "set_alarm":
+                            time_str = args["time"]
+                            message_alarm = args.get("message", "Alarm set!")
+                            # Here you would implement the logic to set an alarm
+                            # For now, we just return a confirmation
+                            tool_result = {
+                                "status": "success",
+                                "message": f"Alarm set for {time_str} with message: {message}"
+                            }
                         else:
                             tool_result = {"status": "error", "message": f"Unknown tool {name}"}
 
@@ -162,7 +216,7 @@ if __name__ == "__main__":
                             "tool_call_id": tool_call.id,
                             "content": json.dumps(tool_result)
                         })
-
+                        
                     # Now call the model again with all tool messages
                     followup_messages = [
                         system_message,
